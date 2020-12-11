@@ -1,28 +1,26 @@
-(defparameter *lista* (obtener-input "dia-1/input.txt"))
-(defparameter *anioDelMal* 2020)
+(defparameter *anio-del-mal* 2020)
 
 (defun obtener-input (path)
   (mapcar #'parse-integer (uiop:read-file-lines path)))
 
-(defun tenemosSuComplementoDe (expensa total expensas)
-  (find (- total expensa) expensas))
+(defun con-complemento (valor total valores)
+  (let* ((valor-complemento (- total valor))
+         (complemento (find valor-complemento valores)))
+    (when complemento (list valor complemento))))
 
 (defun encontrar-dos-que-sumen (total valores)
-  (let ((primer-sumando (find-if (lambda (valor) (tenemosSuComplementoDe valor total valores)) valores)))
-    (when primer-sumando
-      (values primer-sumando (- total primer-sumando)))))
+  (loop :for valor :in valores :when (con-complemento valor total valores) :return :it))
 
 (defun encontrar-tres-que-sumen (total valores)
-  (let ((primer-sumando (find-if (lambda (valor) (encontrar-dos-que-sumen (- total valor) valores)) valores)))
-    (when primer-sumando
-      (multiple-value-bind (uno dos) (encontrar-dos-que-sumen (- total primer-sumando) valores)
-        (values uno dos primer-sumando)))))
+  (loop :for valor :in valores
+        :for (sumando-1 sumando-2) := (encontrar-dos-que-sumen (- total valor) valores)
+        :when sumando-1 :return (list sumando-1 sumando-2 valor)))
 
-(defmacro product (form)
-    `(multiple-value-call #'* ,form))
+(defun producto-de (valores)
+  (apply #'* valores))
 
-(defun solucionarProblema1 (path)
-  (product (encontrar-dos-que-sumen *anioDelMal* (obtener-input path))))
+(defun solucionar-problema-1 (path)
+  (producto-de (encontrar-dos-que-sumen *anio-del-mal* (obtener-input path))))
 
-(defun solucionarProblema2 (path)
-  (product (encontrar-tres-que-sumen *anioDelMal* (obtener-input path))))
+(defun solucionar-problema-2 (path)
+  (producto-de (encontrar-tres-que-sumen *anio-del-mal* (obtener-input path))))
