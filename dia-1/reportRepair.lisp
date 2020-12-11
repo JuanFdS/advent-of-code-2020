@@ -1,9 +1,10 @@
-(defparameter *lista-de-prueba* '(1721 979 366 299 675 1456))
+(defparameter *lista* '())
 
 (defun obtener-input (path)
   (with-open-file (archivo path)
-    (read-line archivo)
-    (read-line archivo)))
+    (print (read-line archivo))
+    (loop :for linea = (read-line archivo nil))
+          :do (print linea)))
 
 (defun complemento (expensa) (- 2020 expensa))
 
