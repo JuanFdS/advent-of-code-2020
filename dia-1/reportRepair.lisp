@@ -3,22 +3,24 @@
 (defun obtener-input (path)
   (mapcar #'parse-integer (uiop:read-file-lines path)))
 
-(defun complemento (expensa) (complemento-de expensa 2020))
-
-(defun complemento-de (expensa total) (- total expensa))
+(defun complemento (expensa) (- 2020 expensa))
 
 (defun tenemosSuComplemento (expensa expensas)
   (find (complemento expensa) expensas))
 
 (defun tenemosSuComplementoDe (expensa total expensas)
-  (find (complemento-de expensa total) expensas))
+  (find (- total expensa) expensas))
 
-(defun foo (complemento-de-la-expensa expensas)
-    (find-if (lambda (una-expensa) (tenemosSuComplementoDe una-expensa complemento-de-la-expensa expensas)) expensas))
+(defun encontrar-dos-que-sumen (total valores)
+  (let ((primer-sumando (find-if (lambda (valor) (tenemosSuComplementoDe valor total valores)) valores)))
+    (when primer-sumando
+      (values primer-sumando (- total primer-sumando)))))
 
-(defun tenemosSusComplementos (expensa expensas)
-  (let ((complemento-de-la-expensa (complemento expensa)))
-        (foo complemento-de-la-expensa expensas)))
+(defun encontrar-tres-que-sumen (total valores)
+  (let ((primer-sumando (find-if (lambda (valor) (encontrar-dos-que-sumen (- total valor) valores)) valores)))
+    (when primer-sumando
+      (multiple-value-bind (uno dos) (encontrar-dos-que-sumen (- total primer-sumando) valores)
+        (values uno dos primer-sumando)))))
 
 (defun producto-de-expensas-buscadas (expensas)
   (let ((expensa-buscada (find-if (lambda (expensa) (tenemosSuComplemento expensa expensas)) expensas)))
