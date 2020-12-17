@@ -32,4 +32,10 @@ mod tests {
         assert!(!contrasenia_valida_segun_politica(1, 1, "a", "aa".to_string()));
     }
 
+    #[test]
+    fn bleh() {
+        assert!(contrasenia_valida_segun_politica(1, 3, "a", "abcde".to_string()));
+        assert!(!contrasenia_valida_segun_politica(1, 3, "b", "cdefg".to_string()));
+        assert!(contrasenia_valida_segun_politica(2, 9, "c", "ccccccccc".to_string()));
+    }
 }
