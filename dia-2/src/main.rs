@@ -22,6 +22,11 @@ struct ContraseniaYPolitica {
     contrasenia: String
 }
 
+fn parsear_input(input: &str) -> Result<Vec<ContraseniaYPolitica>, ParseIntError> {
+    let c: Vec<&str> = input.split('\n').collect();
+    return c.into_iter().map(|linea| linea.parse::<ContraseniaYPolitica>()).collect()
+}
+
 impl FromStr for ContraseniaYPolitica {
     type Err = ParseIntError;
 
@@ -82,4 +87,11 @@ mod tests {
                     Ok(ContraseniaYPolitica { minimo: 1, maximo: 3, letra: "b".to_string(), contrasenia: "cdefg".to_string() }))
     }
 
+    #[test]
+    fn bleh4() {
+        let archivo = "1-3 a: abcde\n1-3 b: cdefg";
+        assert_eq!(parsear_input(archivo),
+        Ok(vec![ContraseniaYPolitica { minimo: 1, maximo: 3, letra: "a".to_string(), contrasenia: "abcde".to_string() },
+        ContraseniaYPolitica { minimo: 1, maximo: 3, letra: "b".to_string(), contrasenia: "cdefg".to_string() }]))
+    }
 }
