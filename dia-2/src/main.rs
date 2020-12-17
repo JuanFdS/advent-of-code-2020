@@ -14,6 +14,15 @@ fn parsear_politica_y_contrasenia(input: String) -> (i32, i32, &'static str, Str
     return (1, 3, "a", "abcde".to_string());
 }
 
+fn resolver_para(input: &str) -> i32 {
+    let contrasenias_y_politicas : Vec<ContraseniaYPolitica> =  parsear_input(input).unwrap();
+    return contrasenias_y_politicas.into_iter().
+        filter(|contrasenia_y_politica| contrasenia_valida_segun_politica(contrasenia_y_politica.minimo,
+            contrasenia_y_politica.maximo,
+            contrasenia_y_politica.letra.to_string(),
+            contrasenia_y_politica.contrasenia.to_string())).count() as i32;
+}
+
 #[derive(Debug, PartialEq)]
 struct ContraseniaYPolitica {
     minimo: i32,
@@ -93,5 +102,11 @@ mod tests {
         assert_eq!(parsear_input(archivo),
         Ok(vec![ContraseniaYPolitica { minimo: 1, maximo: 3, letra: "a".to_string(), contrasenia: "abcde".to_string() },
         ContraseniaYPolitica { minimo: 1, maximo: 3, letra: "b".to_string(), contrasenia: "cdefg".to_string() }]))
+    }
+
+    #[test]
+    fn bleh5() {
+        let archivo = "1-3 a: abcde\n1-3 b: cdefg\n2-9 c: ccccccccc";
+        assert_eq!(resolver_para(archivo), 2)
     }
 }
