@@ -1,3 +1,6 @@
+use std::str::FromStr;
+use std::num::ParseIntError;
+
 fn main() {
     println!("Hello, world!");
 }
@@ -9,6 +12,29 @@ fn contrasenia_valida_segun_politica(minimo: i32, maximo: i32, letra: &str, cont
 
 fn parsear_politica_y_contrasenia(input: String) -> (i32, i32, &'static str, String) {
     return (1, 3, "a", "abcde".to_string());
+}
+
+struct ContraseniaYPolitica {
+    minimo: i32,
+    maximo: i32,
+    letra: &'static str,
+    contrasenia: String
+}
+
+impl FromStr for ContraseniaYPolitica {
+    type Err = ParseIntError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let splited_input: Vec<&str> = s.split(' ')
+                                 .collect();
+
+        let rango: Vec<&str>= splited_input[0].split('-').collect();
+        let minimo = rango[0].parse::<i32>()?;
+        let maximo = rango[1].parse::<i32>()?;
+        let letra: &'static str = splited_input[1].chars().nth(0).unwrap().to_string();
+        let contrasenia = splited_input[2].to_string();
+        Ok(ContraseniaYPolitica { minimo: minimo, maximo: maximo, letra: letra, contrasenia: contrasenia})
+    }
 }
 
 #[cfg(test)]
@@ -47,4 +73,10 @@ mod tests {
     fn bleh2() {
         assert_eq!(parsear_politica_y_contrasenia("1-3 a: abcde".to_string()), (1, 3, "a", "abcde".to_string()))
     }
+
+    #[test]
+    fn bleh3() {
+        assert_eq!(parsear_politica_y_contrasenia("1-3 b: cdefg".to_string()), (1, 3, "b", "cdefg".to_string()))
+    }
+
 }
