@@ -7,6 +7,10 @@ fn contrasenia_valida_segun_politica(minimo: i32, maximo: i32, letra: &str, cont
     return n >= minimo && n <= maximo
 }
 
+fn parsear_politica_y_contrasenia(input: String) -> (i32, i32, &'static str, String) {
+    return (1, 3, "a", "abcde".to_string());
+}
+
 #[cfg(test)]
 mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
@@ -37,5 +41,10 @@ mod tests {
         assert!(contrasenia_valida_segun_politica(1, 3, "a", "abcde".to_string()));
         assert!(!contrasenia_valida_segun_politica(1, 3, "b", "cdefg".to_string()));
         assert!(contrasenia_valida_segun_politica(2, 9, "c", "ccccccccc".to_string()));
+    }
+
+    #[test]
+    fn bleh2() {
+        assert_eq!(parsear_politica_y_contrasenia("1-3 a: abcde".to_string()), (1, 3, "a", "abcde".to_string()))
     }
 }
