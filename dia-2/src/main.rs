@@ -3,7 +3,8 @@ fn main() {
 }
 
 fn contrasenia_valida_segun_politica(minimo: i32, maximo: i32, letra: &str, contrasenia: String) -> bool {
-    return (contrasenia.matches(letra).count() as i32) >= minimo
+    let n = contrasenia.matches(letra).count() as i32;
+    return n >= minimo && n <= maximo
 }
 
 #[cfg(test)]
@@ -25,4 +26,10 @@ mod tests {
     fn contrasenia_no_es_valida_si_la_letra_pedida_aparece_menos_veces_que_el_minimo_de_la_politica() {
         assert!(!contrasenia_valida_segun_politica(2, 3, "a", "a".to_string()));
     }
+
+    #[test]
+    fn contrasenia_no_es_valida_si_la_letra_pedida_aparece_mas_veces_que_el_maximo_de_la_politica() {
+        assert!(!contrasenia_valida_segun_politica(1, 1, "a", "aa".to_string()));
+    }
+
 }
